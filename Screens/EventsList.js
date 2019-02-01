@@ -13,6 +13,10 @@ import events from '../data/events';
 // https://pastebin.com/raw/vcxBNZYE
 class EventsList extends Component {
 
+    static navigationOptions = {
+        title: 'Event List'
+    }    
+
     _renderRow = ({item, index}) => {
         return (
             <TouchableHighlight 
