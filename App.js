@@ -4,6 +4,7 @@ import {
 } from 'react-navigation';
 import SplashScreen from './Screens/SplashScreen';
 import EventsList from './Screens/EventsList';
+import RegistrationScreen from './Screens/RegistrationScreen';
 
 const App = createStackNavigator({
   Splash: {
@@ -11,6 +12,9 @@ const App = createStackNavigator({
   },
   Events: {
     screen: EventsList,
+  },
+  Registration: {
+    screen: RegistrationScreen
   }
 });
 

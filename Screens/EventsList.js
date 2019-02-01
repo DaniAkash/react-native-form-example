@@ -22,7 +22,7 @@ class EventsList extends Component {
             <TouchableHighlight 
                 style={styles.rowTouchable}
                 underlayColor={'silver'}
-                onPress={() => null}
+                onPress={() => this.props.navigation.navigate('Registration', {title: item.event})}
                 >
                 <View style={[styles.rowContainer, {
                     backgroundColor: index %2 ? '#F0FFF0': 'white'
