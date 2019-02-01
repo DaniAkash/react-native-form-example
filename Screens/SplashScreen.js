@@ -7,6 +7,9 @@ import {
     Text,
     StyleSheet
 } from 'react-native';
+import {StackActions} from 'react-navigation';
+
+const ReplaceScreen = StackActions.replace({ routeName: "Events" });
 
 class SplashScreen extends Component {
 
@@ -16,7 +19,7 @@ class SplashScreen extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.props.navigation.navigate('Events');
+            this.props.navigation.dispatch(ReplaceScreen);
         }, 1000);
     }
 
