@@ -9,6 +9,8 @@ import {
     TouchableHighlight,
     DatePickerAndroid,
     Button,
+    Modal,
+    Image,
 } from 'react-native';
 
 class RegistrationScreen extends Component {
@@ -25,6 +27,8 @@ class RegistrationScreen extends Component {
         email: "",
         mobileNumber: "",
         dateOfBirth: new Date(1990, 1, 1),
+        loading: false,
+        done: false,
     };
     _nameRef = React.createRef();
     _emailRef = React.createRef();
@@ -50,9 +54,58 @@ class RegistrationScreen extends Component {
         }
     };
 
+    submit = () => {
+        this.setState({
+            loading: true,
+        }, () => {
+          setTimeout(() => {
+            this.setState({
+                loading: false,
+                done: true,
+            });
+          }, 3000);  
+        })
+    };
+
+    success = () => {
+        this.setState({
+            done: false,
+        });
+        this.props.navigation.goBack();
+    };
+
     render() {
         return (
             <View style={styles.registrationContainer}>
+                <Modal
+                    visible={this.state.loading}
+                    animationType="slide"
+                    transparent={true}
+                >
+                <View style={styles.loadingContainer}>
+                    <Image
+                        source={require('../resources/images/loading.gif')}
+                        style={{height: 50, width: 50}}
+                        resizeMode={'contain'}
+                    />
+                </View>
+                </Modal>
+
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.done}
+                    onRequestClose={() => this.success()}
+                    >
+                    <View style={styles.doneContainer}>
+                    <Text style={styles.doneText}>Event Successfully Registered!</Text>
+                    <Button
+                        onPress={() => this.success()}
+                        title="Done"
+                        color="green"
+                    />
+                    </View>
+                </Modal>
                 <TextInput
                     ref={this._nameRef}
                     placeholder={'Your Name...'}
@@ -135,6 +188,23 @@ const styles = StyleSheet.create({
         width: 200, 
         alignSelf: 'center', 
         marginVertical: 20
+    },
+    loadingContainer: {
+        flex: 1, 
+        backgroundColor: 'rgba(0,0,0,0.7)', 
+        alignItems: 'center', 
+        justifyContent: 'center'
+    },
+    doneContainer: {
+        flex: 1, 
+        backgroundColor: 'rgb(255,255,255)', 
+        alignItems: 'center', 
+        justifyContent: 'center'
+    },
+    doneText: {
+        marginBottom: 20, 
+        fontSize: 20, 
+        fontWeight: 'bold'
     }
 })
 
