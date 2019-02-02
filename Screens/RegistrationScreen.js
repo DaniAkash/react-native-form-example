@@ -7,6 +7,8 @@ import {
     StyleSheet,
     Text,
     TouchableHighlight,
+    DatePickerAndroid,
+    Button,
 } from 'react-native';
 
 class RegistrationScreen extends Component {
@@ -27,6 +29,26 @@ class RegistrationScreen extends Component {
     _nameRef = React.createRef();
     _emailRef = React.createRef();
     _mobileRef = React.createRef();
+
+    openDatePicker = async () => {
+        try {
+            const dateOfBirth = new Date(this.state.dateOfBirth);
+            const androidDate = dateOfBirth.setMonth(
+                dateOfBirth.getMonth() - 1
+            );
+            const {action, year, month, day} = await DatePickerAndroid.open({
+                date: androidDate,
+                maxDate: new Date()
+            });
+            if(action !== DatePickerAndroid.dismissedAction) {
+                this.setState({
+                    dateOfBirth: new Date(year, month + 1, day),
+                });
+            }
+        } catch (e) {
+            alert('Unable to open date picker');
+        }
+    };
 
     render() {
         return (
@@ -65,7 +87,7 @@ class RegistrationScreen extends Component {
                     returnKeyType={'next'}
                     keyboardType={'phone-pad'}
                     onSubmitEditing={() => {
-
+                        this.openDatePicker();
                     }}
                 />
 
@@ -81,6 +103,14 @@ class RegistrationScreen extends Component {
                             }/${this.state.dateOfBirth.getFullYear()}`}</Text>
                     </View>
                 </TouchableHighlight>
+
+                <View style={styles.buttonContainer}>
+                    <Button
+                        onPress={()=> this.submit()}
+                        title="Register"
+                        color="#841584"
+                    />
+                </View>
 
             </View>
         )
@@ -99,6 +129,12 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         justifyContent: 'space-around', 
         marginVertical: 10 
+    },
+    buttonContainer: {
+        height: 25, 
+        width: 200, 
+        alignSelf: 'center', 
+        marginVertical: 20
     }
 })
 
