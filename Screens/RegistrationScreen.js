@@ -29,6 +29,7 @@ class RegistrationScreen extends Component {
         dateOfBirth: new Date(1990, 1, 1),
         loading: false,
         done: false,
+        error: false,
     };
     _nameRef = React.createRef();
     _emailRef = React.createRef();
@@ -55,16 +56,31 @@ class RegistrationScreen extends Component {
     };
 
     submit = () => {
-        this.setState({
-            loading: true,
-        }, () => {
-          setTimeout(() => {
+        let each, loopBroken = false;
+        let formValues = {
+            name: this.state.name,
+            email: this.state.email,
+            phoneNumber: this.state.phoneNumber,
+        };
+        for(each in formValues) {
+            if(!formValues[each]) {
+                this.setState({error: true});
+                loopBroken = true;
+                break;
+            }
+        }
+        if(!loopBroken) {
             this.setState({
-                loading: false,
-                done: true,
-            });
-          }, 3000);  
-        })
+                loading: true,
+            }, () => {
+              setTimeout(() => {
+                this.setState({
+                    loading: false,
+                    done: true,
+                });
+              }, 3000);  
+            })
+        }
     };
 
     success = () => {
@@ -110,7 +126,7 @@ class RegistrationScreen extends Component {
                     ref={this._nameRef}
                     placeholder={'Your Name...'}
                     onChangeText={name => this.setState({ name })}
-                    underlineColorAndroid={'black'}
+                    underlineColorAndroid={this.state.error && !this.state.name?'red':'green'}
                     value={this.state.name}
                     returnKeyType={'next'}
                     onSubmitEditing={() => {
@@ -122,7 +138,7 @@ class RegistrationScreen extends Component {
                     ref={this._emailRef}
                     placeholder={'Your Email...'}
                     onChangeText={email => this.setState({ email })}
-                    underlineColorAndroid={'black'}
+                    underlineColorAndroid={this.state.error && !this.state.email?'red':'green'}
                     value={this.state.email}
                     returnKeyType={'next'}
                     keyboardType={'email-address'}
@@ -135,7 +151,7 @@ class RegistrationScreen extends Component {
                     ref={this._mobileRef}
                     placeholder={'Your Mobile Number...'}
                     onChangeText={mobileNumber => this.setState({ mobileNumber })}
-                    underlineColorAndroid={'black'}
+                    underlineColorAndroid={this.state.error && !this.state.mobileNumber?'red':'green'}
                     value={this.state.mobileNumber}
                     returnKeyType={'next'}
                     keyboardType={'phone-pad'}
